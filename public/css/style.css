@@ -1,3 +1,10 @@
-.card-body{
+body{
+    background-color: #eceff1;
+}
+.card{
     margin-top: 5vh;
+}
+
+.card-footer{
+    padding-left: 30px;
 }
