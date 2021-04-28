@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const connection = require('./database/database');
 const perguntaModel = require('./models/Pergunta');
+const Article = require('./models/Article');
 
 connection.authenticate().then(() =>{
     console.log("Conexão feita com o banco de dados")
@@ -31,11 +32,11 @@ app.get('/pergunta/:id', (req,res) => {
         where : {id : id}
     }).then(pergunta => {
         if(pergunta === undefined)
-           res.redirect('/')  
-        else      
+           res.redirect('/')
+        else
            res.render('pergunta',{
                pergunta: pergunta
-           })   
+           })
     });
 });
 
@@ -44,14 +45,22 @@ app.get("/perguntar",(req,res) => {
 });
 
 app.post("/salvarpergunta", (req,res) => {
-    var titulo = req.body.titulo;
-    var descricao = req.body.descricao;
-    perguntaModel.create({
-        titulo : titulo,
-        descricao: descricao
-    }).then(()=>{
-        res.redirect('/');
-    });
+
+  var titulo = req.body.titulo;
+  var descricao = req.body.descricao;
+  perguntaModel.create({
+      titulo : titulo,
+      descricao: descricao
+  }).then(()=>{
+      res.redirect('/');
+  });
+});
+
+app.get("/article/:title/:author/:body", (req,res) => {
+
+  const Article = mongoose.model("Article", Article);
+  const article = new Article({title: title, author: author, body: body});
+  article.save();
 });
 
 app.listen(8081,() => {console.log("App rodando")});
@@ -59,10 +68,10 @@ app.listen(8081,() => {console.log("App rodando")});
 /*
 
 app.get("/:nome/:lang",(req,res) => {
-    
+
     var nome = req.params.nome;
     var lang = req.params.lang;
-    
+
     res.render("index",{
         nome : nome,
         lang: lang,
@@ -72,4 +81,4 @@ app.get("/:nome/:lang",(req,res) => {
         produtos:[],
     });
 });
-*/ 
+*/
